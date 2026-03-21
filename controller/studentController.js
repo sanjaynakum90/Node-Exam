@@ -71,7 +71,7 @@ const updateStudentData = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        const existingStudent = await StudentModel.findById(id);
+        const studentDetails = await Student.findById(id);
 
         if (!existingStudent) {
             return next(new HttpError("student id not found", 404));
@@ -90,14 +90,14 @@ const updateStudentData = async (req, res, next) => {
         }
 
         updates.forEach((update) => {
-            existingStudent[update] = req.body[update];
+            studentDetails[update] = req.body[update];
         });
 
-        await existingStudent.save();
+        await studentDetails.save();
 
         res
             .status(200)
-            .json({ message: "student data updated successfully", existingStudent });
+            .json({ message: "student data updated successfully", studentDetails });
     } catch (error) {
         next(new HttpError(error.message, 500));
     }
